@@ -1,54 +1,61 @@
 package com.example.campusstage2;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import com.example.campusstage2.model.Users;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText usernameInput;
-    EditText passwordInput;
-    Button loginButton;
+    private EditText usernameInput;
+    private EditText passwordInput;
+    private Button loginButton;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
         usernameInput = findViewById(R.id.username_input);
         passwordInput = findViewById(R.id.password_input);
         loginButton = findViewById(R.id.loginButton);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
         loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
-                if(usernameInput.getText().toString().equals("admin")
-                        && passwordInput.getText().toString().equals("admin"))
-                {
+                Users users = new Users(v.getContext());
+                SQLiteDatabase db = users.dbHelper.getReadableDatabase();
+
+                String inputUsername = usernameInput.getText().toString();
+                String inputPassword = HashUtil.hashPassword(passwordInput.getText().toString());
+
+                Cursor cursor = db.rawQuery("SELECT * FROM users WHERE username = ? AND password = ?",
+                        new String[]{inputUsername, inputPassword});
+
+                if (cursor.moveToFirst()) {
                     Intent intent = new Intent(v.getContext(), MainActivity.class);
                     v.getContext().startActivity(intent);
-                }
-                else
-                {
-                    Toast toast = Toast.makeText(v.getContext(),"Invalid username/password",Toast.LENGTH_LONG); // in Activity
-                    toast.show();
+                } else {
+                    Toast.makeText(v.getContext(), "Invalid username/password", Toast.LENGTH_LONG).show();
+                    return;
                 }
             }
-
         });
+        TextView registerLink = findViewById(R.id.register_link);
+        registerLink.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), RegisterActivity.class);
+                v.getContext().startActivity(intent);
+            }
+        });
+
     }
 }
