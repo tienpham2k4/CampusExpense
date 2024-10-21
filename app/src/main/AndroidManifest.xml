@@ -15,12 +15,16 @@
         <activity
             android:name=".RegisterActivity"
             android:exported="false"
-            android:theme="@style/Theme.CampusStage2" />
+            android:windowSoftInputMode="adjustPan"
+        android:theme="@style/Theme.CampusStage2" />
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
+            android:exported="true" >
+
+        </activity>
         <activity
             android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

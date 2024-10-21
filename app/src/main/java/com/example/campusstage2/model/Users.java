@@ -8,7 +8,6 @@ import com.example.campusstage2.DatabaseHelper;
 
 public class Users {
     public DatabaseHelper dbHelper;
-
     private String username;
     private String phone;
     private String email;

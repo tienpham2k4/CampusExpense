@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
         TextView registerLink = findViewById(R.id.register_link);
         registerLink.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -56,6 +57,5 @@ public class LoginActivity extends AppCompatActivity {
                 v.getContext().startActivity(intent);
             }
         });
-
     }
 }

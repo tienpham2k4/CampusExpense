@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         Button registerButton = findViewById(R.id.register_button);
         EditText username = findViewById(R.id.register_username_input);
@@ -47,7 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(view.getContext(), "Please enter username!", Toast.LENGTH_LONG).show();
                     return;
                 }
-
                 Users users = new Users(view.getContext());
                 SQLiteDatabase db = users.dbHelper.getReadableDatabase();
                 String query = "SELECT " +
@@ -86,15 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
 
-//                Cursor checkUsername = db.rawQuery("SELECT COUNT(*) FROM users WHERE username=?", new String[] { username.getText().toString() });
-//                checkUsername.moveToFirst();
-//                int countCheckUsername = checkUsername.getInt(0);
-//                if(countCheckUsername>0)
-//                {
-//                    Toast.makeText(view.getContext(), "Username already exists", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-
+//
 
             }
         });
