@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.campusstage2.DatabaseHelper;
+import com.example.campusstage2.HashUtil;
 
 public class Users {
     public DatabaseHelper dbHelper;
@@ -24,7 +25,7 @@ public class Users {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("username", username);
-        values.put("password", password);
+        values.put("password", HashUtil.hashPassword(password));
         values.put("phone", phone);
         values.put("email", email);
         values.put("name", name);

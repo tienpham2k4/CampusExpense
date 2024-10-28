@@ -1,6 +1,8 @@
 package com.example.campusstage2;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -34,12 +36,26 @@ public class LoginActivity extends AppCompatActivity {
                 SQLiteDatabase db = users.dbHelper.getReadableDatabase();
 
                 String inputUsername = usernameInput.getText().toString();
-                String inputPassword = HashUtil.hashPassword(passwordInput.getText().toString());
+//                String inputPassword = HashUtil.hashPassword(passwordInput.getText().toString());
+                String inputPassword = passwordInput.getText().toString();
 
                 Cursor cursor = db.rawQuery("SELECT * FROM users WHERE username = ? AND password = ?",
-                        new String[]{inputUsername, inputPassword});
-
+                        new String[]{inputUsername, HashUtil.hashPassword(inputPassword)});
                 if (cursor.moveToFirst()) {
+
+                    @SuppressLint("Range") int id  =cursor.getInt(cursor.getColumnIndex("id"));
+                    @SuppressLint("Range") String name  =
+                            cursor.getString(cursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String phone  =
+                            cursor.getString(cursor.getColumnIndex("phone"));
+                    @SuppressLint("Range") String email  =
+                            cursor.getString(cursor.getColumnIndex("email"));
+                    @SuppressLint("Range") String username  =
+                            cursor.getString(cursor.getColumnIndex("username"));
+                    Auth auth = new Auth(getBaseContext());
+                    auth.saveUser(id, name, phone,email,username);
+
+
                     Intent intent = new Intent(v.getContext(), MainActivity.class);
                     v.getContext().startActivity(intent);
                 } else {

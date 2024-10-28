@@ -8,11 +8,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.campusstage2.R;
+import com.example.campusstage2.model.Category;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +34,7 @@ public class AddFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     public EditText editTextDate;
+    public Spinner categoriesSpiner;
     public AddFragment() {
         // Required empty public constructor
     }
@@ -67,17 +72,15 @@ public class AddFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add, container, false);
-
-        // Tìm EditText trong layout
         editTextDate = view.findViewById(R.id.editTextDate);
-
-        // Thiết lập sự kiện khi người dùng bấm vào EditText
         editTextDate.setOnClickListener(v -> showDatePickerDialog());
 
+         categoriesSpiner = view.findViewById(R.id.category_id);
+        loadCategoriesIntoSpinner();
         return view;
     }
 
-    private void showDatePickerDialog() {
+    public void showDatePickerDialog() {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
@@ -85,10 +88,21 @@ public class AddFragment extends Fragment {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
                 (view, selectedYear, selectedMonth, selectedDay) -> {
-                    // Hiển thị ngày đã chọn lên EditText
                     editTextDate.setText(selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear);
                 }, year, month, day);
         datePickerDialog.show();
     }
+    public void loadCategoriesIntoSpinner()
+    {
+        Category category = new Category(requireContext());
+        List<Category> formattedCategories = category.getFormattedCategories();
+
+        // Use ArrayAdapter to display category names in the Spinner
+        ArrayAdapter<Category> adapter = new ArrayAdapter<>(this.getContext()
+                , android.R.layout.simple_spinner_item, formattedCategories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categoriesSpiner.setAdapter(adapter);
+    }
+
 
 }

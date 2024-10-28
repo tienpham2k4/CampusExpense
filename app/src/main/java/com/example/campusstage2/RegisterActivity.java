@@ -2,6 +2,7 @@ package com.example.campusstage2;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -49,6 +50,26 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(view.getContext(), "Please enter username!", Toast.LENGTH_LONG).show();
                     return;
                 }
+                if(phone.getText().toString().equals(""))
+                {
+                    Toast.makeText(view.getContext(), "Please enter phone number!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(email.getText().toString().equals(""))
+                {
+                    Toast.makeText(view.getContext(), "Please enter email!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(name.getText().toString().equals(""))
+                {
+                    Toast.makeText(view.getContext(), "Please enter your name!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(password.getText().toString().equals(""))
+                {
+                    Toast.makeText(view.getContext(), "Please enter your password!", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Users users = new Users(view.getContext());
                 SQLiteDatabase db = users.dbHelper.getReadableDatabase();
                 String query = "SELECT " +
@@ -84,11 +105,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 email.getText().toString(),
                                 name.getText().toString()
                         );
+
                     }
                 }
-
-//
-
             }
         });
 
