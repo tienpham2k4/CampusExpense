@@ -74,34 +74,6 @@ public class Category {
         }
         return categories;
     }
-    public List<Category> getFormattedCategories() {
-        List<Category> categories = getAllCategories();
-        List<Category> formattedCategories = new ArrayList<>();
-
-        Map<Integer, List<Category>> subcategoryMap = new HashMap<>();
-
-        for (Category category : categories) {
-            if (category.getParentId() != null) {
-                subcategoryMap.computeIfAbsent(category.getParentId(), k -> new ArrayList<>()).add(category);
-            }
-        }
-
-        for (Category category : categories) {
-            if (category.getParentId() == null) {
-                formattedCategories.add(category);
-
-                List<Category> subcategories = subcategoryMap.get(category.getId());
-                if (subcategories != null) {
-                    for (Category subcategory : subcategories) {
-                        subcategory.setName("  - " + subcategory.getName()); // Format the name for display
-                        formattedCategories.add(subcategory);
-                    }
-                }
-            }
-        }
-
-        return formattedCategories;
-    }
 
 
     @Override

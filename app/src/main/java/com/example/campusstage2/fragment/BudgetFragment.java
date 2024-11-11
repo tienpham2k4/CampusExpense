@@ -1,5 +1,6 @@
 package com.example.campusstage2.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,7 +8,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.example.campusstage2.AddBudgetActivity;
 import com.example.campusstage2.R;
 
 /**
@@ -61,6 +64,15 @@ public class BudgetFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_budget, container, false);
+        View view = inflater.inflate(R.layout.fragment_budget, container, false);
+        Button addBudgetButton = view.findViewById(R.id.addBudgetButton);
+        addBudgetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), AddBudgetActivity.class);
+                view.getContext().startActivity(intent);
+            }
+        });
+        return view;
     }
 }

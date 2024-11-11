@@ -105,7 +105,10 @@ public class RegisterActivity extends AppCompatActivity {
                                 email.getText().toString(),
                                 name.getText().toString()
                         );
-
+                        Toast.makeText(view.getContext(),
+                                "Register success!!!", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(view.getContext(), LoginActivity.class);
+                        view.getContext().startActivity(intent);
                     }
                 }
             }

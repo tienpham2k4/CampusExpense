@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         TextView textHome = view.findViewById(R.id.text_home);
         Auth auth = new Auth(getContext());
-        textHome.setText("Hi "+auth.getName());
+        textHome.setText("Hi "+auth.getName()+", "+auth.getPhone());
         return view;
     }
 }

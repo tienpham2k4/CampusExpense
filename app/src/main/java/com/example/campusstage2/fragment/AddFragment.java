@@ -1,17 +1,20 @@
 package com.example.campusstage2.fragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.example.campusstage2.Adapter.CategoryAdapter;
 import com.example.campusstage2.R;
 import com.example.campusstage2.model.Category;
 
@@ -34,7 +37,8 @@ public class AddFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     public EditText editTextDate;
-    public Spinner categoriesSpiner;
+    public TextView selectCategory;
+
     public AddFragment() {
         // Required empty public constructor
     }
@@ -73,13 +77,44 @@ public class AddFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add, container, false);
         editTextDate = view.findViewById(R.id.editTextDate);
-        editTextDate.setOnClickListener(v -> showDatePickerDialog());
+        editTextDate.setOnTouchListener((view1, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                showDatePickerDialog();
+            }
+            return true;
+        });
+        selectCategory = view.findViewById(R.id.chooseCategory);
 
-         categoriesSpiner = view.findViewById(R.id.category_id);
-        loadCategoriesIntoSpinner();
+        selectCategory.setOnClickListener(v -> showCategoryDialog());
+
+
+
         return view;
     }
+    private void showCategoryDialog() {
+        Category category = new Category(requireContext());
+        List<Category> categories = category.getAllCategories();
 
+        View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.category_list_view, null);
+        ListView categoryListView = dialogView.findViewById(R.id.categoryList);
+
+        CategoryAdapter adapter = new CategoryAdapter(requireContext(), categories);
+        categoryListView.setAdapter(adapter);
+
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                .setTitle("Select Category")
+                .setView(dialogView)
+                .create();
+
+        categoryListView.setOnItemClickListener((parent, view, position, id) -> {
+            Category selectedCategory = categories.get(position);
+            selectCategory.setText(selectedCategory.toString());
+            System.out.println(selectedCategory.getId());
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
     public void showDatePickerDialog() {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -92,17 +127,7 @@ public class AddFragment extends Fragment {
                 }, year, month, day);
         datePickerDialog.show();
     }
-    public void loadCategoriesIntoSpinner()
-    {
-        Category category = new Category(requireContext());
-        List<Category> formattedCategories = category.getFormattedCategories();
 
-        // Use ArrayAdapter to display category names in the Spinner
-        ArrayAdapter<Category> adapter = new ArrayAdapter<>(this.getContext()
-                , android.R.layout.simple_spinner_item, formattedCategories);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categoriesSpiner.setAdapter(adapter);
-    }
 
 
 }

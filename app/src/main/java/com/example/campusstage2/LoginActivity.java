@@ -26,23 +26,27 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Auth auth = new Auth(getBaseContext());
+        if(auth.getUserId() > 0) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+
         usernameInput = findViewById(R.id.username_input);
         passwordInput = findViewById(R.id.password_input);
         loginButton = findViewById(R.id.loginButton);
+        Users users = new Users(getBaseContext());
+        SQLiteDatabase db = users.dbHelper.getReadableDatabase();
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Users users = new Users(v.getContext());
-                SQLiteDatabase db = users.dbHelper.getReadableDatabase();
-
                 String inputUsername = usernameInput.getText().toString();
 //                String inputPassword = HashUtil.hashPassword(passwordInput.getText().toString());
                 String inputPassword = passwordInput.getText().toString();
-
                 Cursor cursor = db.rawQuery("SELECT * FROM users WHERE username = ? AND password = ?",
                         new String[]{inputUsername, HashUtil.hashPassword(inputPassword)});
                 if (cursor.moveToFirst()) {
-
                     @SuppressLint("Range") int id  =cursor.getInt(cursor.getColumnIndex("id"));
                     @SuppressLint("Range") String name  =
                             cursor.getString(cursor.getColumnIndex("name"));
@@ -54,8 +58,6 @@ public class LoginActivity extends AppCompatActivity {
                             cursor.getString(cursor.getColumnIndex("username"));
                     Auth auth = new Auth(getBaseContext());
                     auth.saveUser(id, name, phone,email,username);
-
-
                     Intent intent = new Intent(v.getContext(), MainActivity.class);
                     v.getContext().startActivity(intent);
                 } else {
