@@ -9,9 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.campusstage2.DatabaseHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Category {
     private DatabaseHelper dbHelper;
@@ -23,12 +21,34 @@ public class Category {
     public Category(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
-
     public Category(Integer id, String name, Integer parentId, Integer userId) {
-        this.id = id;
-        this.name = name;
-        this.parentId = parentId;
-        this.userId = userId;
+        this.setId(id);
+        this.setName(name);
+        this.setParentId(parentId);
+        this.setUserId(userId);
+    }
+
+    @SuppressLint("Range")
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query("categories",
+                new String[]{"id", "name", "parent_id", "user_id"},
+                null, null, null, null, null);
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(cursor.getColumnIndex("id"));
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                Integer parentId = cursor.isNull(cursor.getColumnIndex("parent_id"))
+                        ? null : cursor.getInt(cursor.getColumnIndex("parent_id"));
+                Integer userId = cursor.isNull(cursor.getColumnIndex("user_id"))
+                        ? null : cursor.getInt(cursor.getColumnIndex("user_id"));
+                categories.add(new Category(id, name, parentId, userId));
+            }
+            cursor.close();
+        }
+        return categories;
     }
 
     public void insertCategory(String name, Integer parentId, Integer userId) {
@@ -47,41 +67,23 @@ public class Category {
                 new String[]{String.valueOf(categoryId)}, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            this.id = cursor.getInt(cursor.getColumnIndex("id"));
-            this.name = cursor.getString(cursor.getColumnIndex("name"));
-            this.parentId = cursor.isNull(cursor.getColumnIndex("parent_id")) ? null : cursor.getInt(cursor.getColumnIndex("parent_id"));
-            this.userId = cursor.isNull(cursor.getColumnIndex("user_id")) ? null : cursor.getInt(cursor.getColumnIndex("user_id"));
+            this.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            this.setName(cursor.getString(cursor.getColumnIndex("name")));
+            this.setParentId(cursor.isNull(cursor.getColumnIndex("parent_id"))
+                    ? null : cursor.getInt(cursor.getColumnIndex("parent_id")));
+            this.setUserId(cursor.isNull(cursor.getColumnIndex("user_id"))
+                    ? null : cursor.getInt(cursor.getColumnIndex("user_id")));
             cursor.close();
         }
         return this;
     }
 
-    @SuppressLint("Range")
-    public List<Category> getAllCategories() {
-        List<Category> categories = new ArrayList<>();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query("categories", new String[]{"id", "name", "parent_id", "user_id"}, null, null, null, null, null);
 
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                int id = cursor.getInt(cursor.getColumnIndex("id"));
-                String name = cursor.getString(cursor.getColumnIndex("name"));
-                Integer parentId = cursor.isNull(cursor.getColumnIndex("parent_id")) ? null : cursor.getInt(cursor.getColumnIndex("parent_id"));
-                Integer userId = cursor.isNull(cursor.getColumnIndex("user_id")) ? null : cursor.getInt(cursor.getColumnIndex("user_id"));
-                categories.add(new Category(id, name, parentId, userId));
-            }
-            cursor.close();
-        }
-        return categories;
-    }
 
 
     @Override
     public String toString() {
-        if (this.parentId != null) {
-            return name; // Subcategory format
-        }
-        return name;
+        return getName();
     }
 
     public Integer getId() {

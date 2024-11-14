@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "campusexpense.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -15,6 +15,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createUsersTable(db);
         createCategoriesTable(db);
         dumpCategoriesData(db);
+        createBudgetTable(db);
+        createExpenseTable(db);
+
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -53,5 +56,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "('Clothing', 4), " +
                 "('Electronics', 4)";
         db.execSQL(INSERT_CATEGORIES_DATA);
+    }
+
+    public void createBudgetTable(SQLiteDatabase db)
+    {
+        String CREATE_BUDGET_TABLE = "CREATE TABLE budgets (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "category_id INTEGRER NOT NULL, " +
+                "user_id INTEGRER NOT NULL, " +
+                "start_date DATE NOT NULL, " +
+                "end_date DATE NOT NULL, " +
+                "amount INTEGER NOT NULL, " +
+                "remaining INTEGER NOT NULL, " +
+                " FOREIGN KEY (category_id)" +
+                " REFERENCES categories (id)," +
+                " FOREIGN KEY (user_id)" +
+                " REFERENCES users (id))";
+        db.execSQL(CREATE_BUDGET_TABLE);
+    }
+    public void createExpenseTable(SQLiteDatabase db)
+    {
+        String CREATE_EXPENSE_TABLE = "CREATE TABLE expense (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "category_id INTEGRER NOT NULL, " +
+                "user_id INTEGRER NOT NULL, " +
+                "date DATE NOT NULL, " +
+                "amount INTEGER NOT NULL, " +
+                "note TEXT," +
+                " FOREIGN KEY (category_id)" +
+                " REFERENCES categories (id)," +
+                " FOREIGN KEY (user_id)" +
+                " REFERENCES users (id))";
+        db.execSQL(CREATE_EXPENSE_TABLE);
     }
 }

@@ -1,6 +1,5 @@
 package com.example.campusstage2.fragment;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
@@ -11,10 +10,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.campusstage2.Adapter.CategoryAdapter;
+import com.example.campusstage2.CategoryListView;
 import com.example.campusstage2.R;
 import com.example.campusstage2.model.Category;
 
@@ -38,6 +36,7 @@ public class AddFragment extends Fragment {
     private String mParam2;
     public EditText editTextDate;
     public TextView selectCategory;
+    private CategoryListView categoryListView;
 
     public AddFragment() {
         // Required empty public constructor
@@ -85,36 +84,23 @@ public class AddFragment extends Fragment {
         });
         selectCategory = view.findViewById(R.id.chooseCategory);
 
-        selectCategory.setOnClickListener(v -> showCategoryDialog());
+        categoryListView = new CategoryListView(requireContext());
+        Category category = new Category(this.getContext());
+        List<Category> categories = category.getAllCategories();
+
+        selectCategory.setOnClickListener(v ->
+        {
+            categoryListView.showCategoryDialog(requireContext(),categories);
+            categoryListView.setCategorySelectionListener(category1 -> {
+                selectCategory.setText(category1.toString());
+        });
+        });
 
 
 
         return view;
     }
-    private void showCategoryDialog() {
-        Category category = new Category(requireContext());
-        List<Category> categories = category.getAllCategories();
 
-        View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.category_list_view, null);
-        ListView categoryListView = dialogView.findViewById(R.id.categoryList);
-
-        CategoryAdapter adapter = new CategoryAdapter(requireContext(), categories);
-        categoryListView.setAdapter(adapter);
-
-        AlertDialog dialog = new AlertDialog.Builder(requireContext())
-                .setTitle("Select Category")
-                .setView(dialogView)
-                .create();
-
-        categoryListView.setOnItemClickListener((parent, view, position, id) -> {
-            Category selectedCategory = categories.get(position);
-            selectCategory.setText(selectedCategory.toString());
-            System.out.println(selectedCategory.getId());
-            dialog.dismiss();
-        });
-
-        dialog.show();
-    }
     public void showDatePickerDialog() {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -127,6 +113,7 @@ public class AddFragment extends Fragment {
                 }, year, month, day);
         datePickerDialog.show();
     }
+
 
 
 

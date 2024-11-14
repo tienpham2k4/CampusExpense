@@ -11,7 +11,7 @@
         android:roundIcon="@drawable/icon_money"
         android:supportsRtl="true"
         android:theme="@style/Theme.CampusStage2"
-        tools:targetApi="34">
+        tools:targetApi="32">
         <activity
             android:name=".AddBudgetActivity"
             android:exported="false" />
