@@ -2,6 +2,7 @@ package com.example.campusstage2;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,9 +22,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.campusstage2.Adapter.CategoryAdapter;
+import com.example.campusstage2.fragment.HomeFragment;
+import com.example.campusstage2.model.Budget;
 import com.example.campusstage2.model.Category;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class AddBudgetActivity extends AppCompatActivity {
@@ -44,6 +51,7 @@ public class AddBudgetActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+
         });
         startDate = findViewById(R.id.startDate);
         endDate = findViewById(R.id.endDate);
@@ -62,6 +70,26 @@ public class AddBudgetActivity extends AppCompatActivity {
         selectCategory = findViewById(R.id.selectCategory);
         selectCategory.setOnClickListener(view -> showCategoryDialog());
         auth = new Auth(this.getBaseContext());
+        saveBudget = findViewById(R.id.saveBudget);
+        saveBudget.setOnClickListener(view -> {
+            amount = findViewById(R.id.amount);
+
+//            selectedCategory
+//            startDate.getText().toString()
+//            endDate.getText().toString()
+            String startDateString = startDate.getText().toString();
+            String endDateString = endDate.getText().toString();
+
+            Budget budget = new Budget(getBaseContext());
+            budget.insertBudget(Integer.valueOf(amount.getText().toString()),selectedCategory.getId(),
+                    auth.getUserId(),startDateString, endDateString);
+            Toast.makeText(getBaseContext(), "Created budget success!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this.getBaseContext(), MainActivity.class);
+            this.getBaseContext().startActivity(intent);
+
+
+        });
+
     }
     private void showCategoryDialog() {
         Category category = new Category(this);

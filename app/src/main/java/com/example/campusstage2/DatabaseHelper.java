@@ -89,4 +89,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " REFERENCES users (id))";
         db.execSQL(CREATE_EXPENSE_TABLE);
     }
+
+
 }
