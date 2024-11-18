@@ -31,12 +31,10 @@ public class AddBudgetActivity extends AppCompatActivity {
     EditText amount;
     EditText startDate;
     EditText endDate;
-    Spinner category;
     Button saveBudget;
     TextView selectCategory;
     Category selectedCategory;
-
-
+    Auth auth ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,10 +61,9 @@ public class AddBudgetActivity extends AppCompatActivity {
         });
         selectCategory = findViewById(R.id.selectCategory);
         selectCategory.setOnClickListener(view -> showCategoryDialog());
+        auth = new Auth(this.getBaseContext());
     }
-
     private void showCategoryDialog() {
-
         Category category = new Category(this);
         List<Category> categories = category.getAllCategories();
         View dialogView = LayoutInflater.from(this).inflate(R.layout.category_list_view, null);
@@ -79,14 +76,32 @@ public class AddBudgetActivity extends AppCompatActivity {
                 .setTitle("Select Category")
                 .setView(dialogView)
                 .create();
-
         categoryListView.setOnItemClickListener((parent, view, position, id) -> {
-            Category selectedCategory = categories.get(position);
+            selectedCategory = categories.get(position);
             selectCategory.setText(selectedCategory.toString());
             dialog.dismiss();
         });
-
         dialog.show();
+        Button addCategory = dialogView.findViewById(R.id.addCategory);
+        addCategory.setOnClickListener(view -> {
+            dialog.dismiss();
+            View createCategoryView = LayoutInflater.from(this).inflate(R.layout.dialog_add_category, null);
+
+            AlertDialog createCategoryDialog = new AlertDialog.Builder(this)
+                    .setTitle("Add Category")
+                    .setView(createCategoryView)
+                    .create();
+            createCategoryDialog.show();
+            Button saveCategory = createCategoryDialog.findViewById(R.id.submitCategory);
+            saveCategory.setOnClickListener(view1 -> {
+                EditText newCategoryInput = createCategoryDialog.findViewById(R.id.categoryInput);
+                Category newCategory = new Category(this.getBaseContext());
+                newCategory.insertCategory(newCategoryInput.getText().toString(),null,auth.getUserId());
+                createCategoryDialog.dismiss();
+                showCategoryDialog();
+            });
+        });
+
     }
 
     public void showStartDatePickerDialog() {
