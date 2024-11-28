@@ -14,7 +14,21 @@ public class Expense {
     private Integer userId;
     private String date;
     private String note;
+    private String categoryName;
+    public String getCategoryName() {
+        return categoryName;
+    }
 
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+    public Expense(Integer id, int amount, Integer categoryId, Integer userId, String date) {
+        this.setId(id);
+        this.setAmount(amount);
+        this.setCategoryId(categoryId);
+        this.setUserId(userId);
+        this.setDate(date);
+    }
 
     public void insertExpense(int amount, Integer categoryId, Integer userId,
                               String date, String note) {
@@ -32,8 +46,6 @@ public class Expense {
     public Expense(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
-
-
 
     public Integer getId() {
         return id;
@@ -82,4 +94,6 @@ public class Expense {
     public void setNote(String note) {
         this.note = note;
     }
+
+
 }

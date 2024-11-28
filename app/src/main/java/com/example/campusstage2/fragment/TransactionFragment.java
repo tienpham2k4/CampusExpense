@@ -1,14 +1,26 @@
 package com.example.campusstage2.fragment;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.campusstage2.Adapter.BudgetAdapter;
+import com.example.campusstage2.Adapter.ExpenseAdapter;
+import com.example.campusstage2.DatabaseHelper;
 import com.example.campusstage2.R;
+import com.example.campusstage2.model.Budget;
+import com.example.campusstage2.model.Expense;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +33,8 @@ public class TransactionFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private RecyclerView expenseRecyclerView;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -61,6 +75,40 @@ public class TransactionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_transaction, container, false);
+        View view =  inflater.inflate(R.layout.fragment_transaction, container, false);
+        expenseRecyclerView = view.findViewById(R.id.expenseRecyclerView);
+        expenseRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        List<Expense> expenses = loadExpenses();
+        ExpenseAdapter adapter = new ExpenseAdapter(expenses);
+        expenseRecyclerView.setAdapter(adapter);
+        return view;
+    }
+    private List<Expense> loadExpenses() {
+        List<Expense> expenses = new ArrayList<>();
+        SQLiteDatabase db = new DatabaseHelper(getContext()).getReadableDatabase();
+        String query = "SELECT e.id, e.amount, " +
+                "e.category_id, e.user_id, e.date, c.name AS category_name " +
+                "FROM expense e " +
+                "LEFT JOIN categories c ON e.category_id = c.id";
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Integer id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+                int amount = cursor.getInt(cursor.getColumnIndexOrThrow("amount"));
+                Integer categoryId = cursor.getInt(cursor.getColumnIndexOrThrow("category_id"));
+                Integer userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id"));
+                String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
+                String categoryName = cursor.getString(cursor.getColumnIndexOrThrow("category_name"));
+
+                Expense expense = new Expense(id,amount,categoryId,userId,date);
+                expense.setCategoryName(categoryName);
+                expenses.add(expense);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return expenses;
     }
 }
