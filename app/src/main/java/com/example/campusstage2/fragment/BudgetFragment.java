@@ -1,17 +1,27 @@
 package com.example.campusstage2.fragment;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.campusstage2.Adapter.BudgetAdapter;
 import com.example.campusstage2.AddBudgetActivity;
+import com.example.campusstage2.DatabaseHelper;
 import com.example.campusstage2.R;
+import com.example.campusstage2.model.Budget;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +34,7 @@ public class BudgetFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private RecyclerView budgetRecyclerView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -73,6 +84,44 @@ public class BudgetFragment extends Fragment {
                 view.getContext().startActivity(intent);
             }
         });
+        budgetRecyclerView = view.findViewById(R.id.budgetRecyclerView);
+        budgetRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        List<Budget> budgets = loadBudgets();
+        BudgetAdapter adapter = new BudgetAdapter(budgets);
+        budgetRecyclerView.setAdapter(adapter);
         return view;
     }
+    private List<Budget> loadBudgets() {
+        List<Budget> budgets = new ArrayList<>();
+        SQLiteDatabase db = new DatabaseHelper(getContext()).getReadableDatabase();
+        String query = "SELECT b.id, b.amount, b.remaining, " +
+                "b.category_id, b.user_id, b.start_date, b.end_date, c.name AS category_name " +
+                "FROM budgets b " +
+                "LEFT JOIN categories c ON b.category_id = c.id";
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Integer id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+                int amount = cursor.getInt(cursor.getColumnIndexOrThrow("amount"));
+                int remaining = cursor.getInt(cursor.getColumnIndexOrThrow("remaining"));
+                Integer categoryId = cursor.getInt(cursor.getColumnIndexOrThrow("category_id"));
+                Integer userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id"));
+                String startDate = cursor.getString(cursor.getColumnIndexOrThrow("start_date"));
+                String endDate = cursor.getString(cursor.getColumnIndexOrThrow("end_date"));
+                String categoryName = cursor.getString(cursor.getColumnIndexOrThrow("category_name"));
+
+                Budget budget = new Budget(id, amount, categoryId, userId, startDate, endDate);
+                budget.setCategoryName(categoryName);
+                budget.setRemaining(remaining);
+                budgets.add(budget);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return budgets;
+    }
+
 }

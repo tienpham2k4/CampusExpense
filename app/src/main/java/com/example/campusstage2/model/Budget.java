@@ -10,11 +10,20 @@ public class Budget {
     private DatabaseHelper dbHelper;
     private Integer id;
     private int amount;
+    private int remaining;
     private Integer categoryId;
     private Integer userId;
     private String startDate;
     private String endDate;
+    private String categoryName;
 
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
     public void insertBudget(int amount, Integer categoryId, Integer userId, String startDate, String endDate) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -86,5 +95,14 @@ public class Budget {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+
+    public int getRemaining() {
+        return remaining;
+    }
+
+    public void setRemaining(int remaining) {
+        this.remaining = remaining;
     }
 }

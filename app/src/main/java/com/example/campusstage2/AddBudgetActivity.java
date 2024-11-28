@@ -75,7 +75,7 @@ public class AddBudgetActivity extends AppCompatActivity {
             amount = findViewById(R.id.amount);
             String startDateString = startDate.getText().toString();
             String endDateString = endDate.getText().toString();
-            Budget budget = new Budget(getBaseContext());
+            Budget budget = new Budget(this);
             budget.insertBudget(
                     Integer.valueOf(amount.getText().toString()),selectedCategory.getId(),
                     auth.getUserId(),startDateString, endDateString);
