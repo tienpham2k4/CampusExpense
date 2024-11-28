@@ -15,6 +15,8 @@ public class Expense {
     private String date;
     private String note;
     private String categoryName;
+    private Category category;
+    private Context context;
     public String getCategoryName() {
         return categoryName;
     }
@@ -40,6 +42,16 @@ public class Expense {
         values.put("date", date);
         values.put("note", note);
         db.insert("expense", null, values);
+    }
+    public void updateExpense() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("amount", this.getAmount());
+        values.put("category_id", this.getCategoryId());
+        values.put("date", this.getDate());
+        values.put("note", this.getNote());
+        db.update("expense", values, "id = ?", new String[]{String.valueOf(this.getId())});
+        db.close();
     }
 
 
@@ -94,6 +106,5 @@ public class Expense {
     public void setNote(String note) {
         this.note = note;
     }
-
 
 }
