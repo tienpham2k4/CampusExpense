@@ -73,21 +73,15 @@ public class AddBudgetActivity extends AppCompatActivity {
         saveBudget = findViewById(R.id.saveBudget);
         saveBudget.setOnClickListener(view -> {
             amount = findViewById(R.id.amount);
-
-//            selectedCategory
-//            startDate.getText().toString()
-//            endDate.getText().toString()
             String startDateString = startDate.getText().toString();
             String endDateString = endDate.getText().toString();
-
             Budget budget = new Budget(getBaseContext());
-            budget.insertBudget(Integer.valueOf(amount.getText().toString()),selectedCategory.getId(),
+            budget.insertBudget(
+                    Integer.valueOf(amount.getText().toString()),selectedCategory.getId(),
                     auth.getUserId(),startDateString, endDateString);
             Toast.makeText(getBaseContext(), "Created budget success!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this.getBaseContext(), MainActivity.class);
             this.getBaseContext().startActivity(intent);
-
-
         });
 
     }
@@ -96,10 +90,8 @@ public class AddBudgetActivity extends AppCompatActivity {
         List<Category> categories = category.getAllCategories();
         View dialogView = LayoutInflater.from(this).inflate(R.layout.category_list_view, null);
         ListView categoryListView = dialogView.findViewById(R.id.categoryList);
-
         CategoryAdapter adapter = new CategoryAdapter(this, categories);
         categoryListView.setAdapter(adapter);
-
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Select Category")
                 .setView(dialogView)
@@ -113,8 +105,8 @@ public class AddBudgetActivity extends AppCompatActivity {
         Button addCategory = dialogView.findViewById(R.id.addCategory);
         addCategory.setOnClickListener(view -> {
             dialog.dismiss();
-            View createCategoryView = LayoutInflater.from(this).inflate(R.layout.dialog_add_category, null);
-
+            View createCategoryView = LayoutInflater.from(this).
+                    inflate(R.layout.dialog_add_category, null);
             AlertDialog createCategoryDialog = new AlertDialog.Builder(this)
                     .setTitle("Add Category")
                     .setView(createCategoryView)

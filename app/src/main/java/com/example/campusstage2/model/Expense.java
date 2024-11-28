@@ -6,38 +6,34 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.campusstage2.DatabaseHelper;
 
-public class Budget {
+public class Expense {
     private DatabaseHelper dbHelper;
     private Integer id;
     private int amount;
     private Integer categoryId;
     private Integer userId;
-    private String startDate;
-    private String endDate;
+    private String date;
+    private String note;
 
-    public void insertBudget(int amount, Integer categoryId, Integer userId, String startDate, String endDate) {
+
+    public void insertExpense(int amount, Integer categoryId, Integer userId,
+                              String date, String note) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("amount", amount);
-        values.put("remaining", amount);
         values.put("category_id", categoryId);
         values.put("user_id", userId);
-        values.put("start_date", startDate);
-        values.put("end_date", endDate);
-        db.insert("budgets", null, values);
+        values.put("date", date);
+        values.put("note", note);
+        db.insert("expense", null, values);
     }
 
-    public Budget(Context context) {
+
+    public Expense(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
-    public Budget(Integer id, int amount, Integer categoryId, Integer userId, String startDate, String endDate) {
-        this.setId(id);
-        this.setAmount(amount);
-        this.setCategoryId(categoryId);
-        this.setUserId(userId);
-        this.setStartDate(startDate);
-        this.setEndDate(endDate);
-    }
+
+
 
     public Integer getId() {
         return id;
@@ -58,10 +54,6 @@ public class Budget {
     public Integer getCategoryId() {
         return categoryId;
     }
-    public Category getCategory()
-    {
-        return
-    }
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
@@ -75,19 +67,19 @@ public class Budget {
         this.userId = userId;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public String getDate() {
+        return date;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getNote() {
+        return note;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setNote(String note) {
+        this.note = note;
     }
 }

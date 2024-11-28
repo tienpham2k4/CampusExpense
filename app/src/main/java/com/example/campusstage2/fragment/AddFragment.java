@@ -1,6 +1,8 @@
 package com.example.campusstage2.fragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,12 +11,20 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.campusstage2.Adapter.CategoryAdapter;
+import com.example.campusstage2.Auth;
 import com.example.campusstage2.CategoryListView;
+import com.example.campusstage2.MainActivity;
 import com.example.campusstage2.R;
+import com.example.campusstage2.RegisterActivity;
 import com.example.campusstage2.model.Category;
+import com.example.campusstage2.model.Expense;
 
 import java.util.Calendar;
 import java.util.List;
@@ -36,8 +46,8 @@ public class AddFragment extends Fragment {
     private String mParam2;
     public EditText editTextDate;
     public TextView selectCategory;
-    private CategoryListView categoryListView;
-
+    public Category selectedCategory;
+    Auth auth;
     public AddFragment() {
         // Required empty public constructor
     }
@@ -73,33 +83,83 @@ public class AddFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        auth = new Auth(this.getContext());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add, container, false);
-        editTextDate = view.findViewById(R.id.editTextDate);
+        editTextDate = view.findViewById(R.id.dateInput);
         editTextDate.setOnTouchListener((view1, motionEvent) -> {
             if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 showDatePickerDialog();
             }
             return true;
         });
-        selectCategory = view.findViewById(R.id.chooseCategory);
-
-        categoryListView = new CategoryListView(requireContext());
-        Category category = new Category(this.getContext());
-        List<Category> categories = category.getAllCategories();
-
-        selectCategory.setOnClickListener(v ->
-        {
-            categoryListView.showCategoryDialog(requireContext(),categories);
-            categoryListView.setCategorySelectionListener(category1 -> {
-                selectCategory.setText(category1.toString());
+        selectCategory = view.findViewById(R.id.selectCategory);
+        selectCategory.setOnClickListener(view1 -> {
+            showCategoryDialog();
         });
+        Button saveExpense = view.findViewById(R.id.saveExpense);
+        saveExpense.setOnClickListener(view1 -> {
+            EditText amount = view.findViewById(R.id.amountInput);
+            EditText note = view.findViewById(R.id.noteInput);
+            Expense expense = new Expense(this.getContext());
+            expense.insertExpense(
+                    Integer.valueOf(amount.getText().toString()),
+                    selectedCategory.getId(),
+                    auth.getUserId(),
+                    editTextDate.getText().toString(),
+                    note.getText().toString()
+                    );
+            Toast.makeText(this.getContext(),"Created expense",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this.getContext(), MainActivity.class);
+            this.getContext().startActivity(intent);
         });
-
-
 
         return view;
     }
+
+// lấy thằng này bên AddBudgetActivity, sửa tất cả chữ "this" thành getContext()
+    private void showCategoryDialog() {
+        Category category = new Category(getContext());
+        List<Category> categories = category.getAllCategories();
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.category_list_view, null);
+        ListView categoryListView = dialogView.findViewById(R.id.categoryList);
+
+        CategoryAdapter adapter = new CategoryAdapter(getContext(), categories);
+        categoryListView.setAdapter(adapter);
+
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setTitle("Select Category")
+                .setView(dialogView)
+                .create();
+        categoryListView.setOnItemClickListener((parent, view, position, id) -> {
+            selectedCategory = categories.get(position);
+            selectCategory.setText(selectedCategory.toString());
+            dialog.dismiss();
+        });
+        dialog.show();
+        Button addCategory = dialogView.findViewById(R.id.addCategory);
+        addCategory.setOnClickListener(view -> {
+            dialog.dismiss();
+            View createCategoryView = LayoutInflater.from(getContext()).
+                    inflate(R.layout.dialog_add_category, null);
+
+            AlertDialog createCategoryDialog = new AlertDialog.Builder(getContext())
+                    .setTitle("Add Category")
+                    .setView(createCategoryView)
+                    .create();
+            createCategoryDialog.show();
+            Button saveCategory = createCategoryDialog.findViewById(R.id.submitCategory);
+            saveCategory.setOnClickListener(view1 -> {
+                EditText newCategoryInput = createCategoryDialog.findViewById(R.id.categoryInput);
+                Category newCategory = new Category(getContext());
+                newCategory.insertCategory(newCategoryInput.getText().toString(),null,auth.getUserId());
+                createCategoryDialog.dismiss();
+                showCategoryDialog();
+            });
+        });
+
+    }
+
 
     public void showDatePickerDialog() {
         final Calendar c = Calendar.getInstance();
@@ -113,7 +173,6 @@ public class AddFragment extends Fragment {
                 }, year, month, day);
         datePickerDialog.show();
     }
-
 
 
 

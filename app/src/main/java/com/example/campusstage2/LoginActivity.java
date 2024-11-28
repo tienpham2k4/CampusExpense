@@ -31,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
-
         usernameInput = findViewById(R.id.username_input);
         passwordInput = findViewById(R.id.password_input);
         loginButton = findViewById(R.id.loginButton);
