@@ -58,10 +58,7 @@ public class Budget {
     public Integer getCategoryId() {
         return categoryId;
     }
-    public Category getCategory()
-    {
-        return
-    }
+
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
