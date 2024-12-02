@@ -2,7 +2,6 @@ package com.example.campusstage2.Adapter;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,11 +54,15 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
             EditText dateInput = dialogView.findViewById(R.id.dateInput);
             TextView selectCategory = dialogView.findViewById(R.id.selectCategory);
             // Điền dữ liệu hiện tại
+            TextView textView = dialogView.findViewById(R.id.textViewExpense);
+            textView.setText("Update an Expense");
+
             amountInput.setText(String.valueOf(expense.getAmount()));
             noteInput.setText(expense.getNote());
             dateInput.setText(expense.getDate());
             selectCategory.setText(expense.getCategoryName());
-
+            Button saveExpense = dialogView.findViewById(R.id.saveExpense);
+            saveExpense.setVisibility(View.INVISIBLE);
             // Xử lý chọn category
             selectCategory.setOnClickListener(v -> {
                 Category category = new Category(view.getContext());
