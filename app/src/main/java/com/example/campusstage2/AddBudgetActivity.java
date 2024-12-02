@@ -80,7 +80,8 @@ public class AddBudgetActivity extends AppCompatActivity {
                     Integer.valueOf(amount.getText().toString()),selectedCategory.getId(),
                     auth.getUserId(),startDateString, endDateString);
             Toast.makeText(getBaseContext(), "Created budget success!", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this.getBaseContext(), MainActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             this.getBaseContext().startActivity(intent);
         });
 

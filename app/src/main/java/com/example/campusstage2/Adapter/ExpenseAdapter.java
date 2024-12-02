@@ -10,11 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.campusstage2.R;
+import com.example.campusstage2.model.Budget;
 import com.example.campusstage2.model.Category;
 import com.example.campusstage2.model.Expense;
 
@@ -40,6 +42,13 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
         holder.amountTextView.setText("Amount: $" + expense.getAmount());
         holder.categoryTextView.setText("Category: " + expense.getCategoryName());
         holder.dateTextView.setText("Date: " + expense.getDate());
+        holder.deteleExpense.setOnClickListener(view -> {
+            Expense deteleExpense = new Expense(view.getContext());
+            deteleExpense.deteleExpense(expense.getId());
+            expenses.remove(position);
+            notifyItemRemoved(position);
+            Toast.makeText(view.getContext(), "Expense deleted", Toast.LENGTH_SHORT).show();
+        });
         holder.itemView.setOnClickListener(view -> {
             View dialogView = LayoutInflater.from(view.getContext()).inflate(R.layout.fragment_add, null);
             AlertDialog dialog = new AlertDialog.Builder(view.getContext())
@@ -138,9 +147,11 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
     }
     static class ExpenseViewHolder extends RecyclerView.ViewHolder {
         TextView amountTextView,categoryTextView, dateTextView;
+        Button deteleExpense;
         public ExpenseViewHolder(@NonNull View itemView) {
             super(itemView);
             amountTextView = itemView.findViewById(R.id.amountTextView);
+            deteleExpense = itemView.findViewById(R.id.deleteExpense);
             categoryTextView = itemView.findViewById(R.id.categoryTextView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
         }
