@@ -72,6 +72,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ExpenseV
             selectCategory.setText(expense.getCategoryName());
             Button saveExpense = dialogView.findViewById(R.id.saveExpense);
             saveExpense.setVisibility(View.INVISIBLE);
+
             // Xử lý chọn category
             selectCategory.setOnClickListener(v -> {
                 Category category = new Category(view.getContext());

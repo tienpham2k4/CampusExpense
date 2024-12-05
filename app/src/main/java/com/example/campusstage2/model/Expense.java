@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.campusstage2.DatabaseHelper;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class Expense {
     private DatabaseHelper dbHelper;
     private Integer id;
@@ -142,4 +145,20 @@ public class Expense {
         this.note = note;
     }
 
+// get by user id & current month
+    public Map<String, Integer> getSumAmountByDay() {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        SQLiteDatabase db = this.dbHelper.getReadableDatabase();
+        String query = "SELECT date, SUM(amount) as total FROM expense GROUP BY date ORDER BY date";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
+                int total = cursor.getInt(cursor.getColumnIndexOrThrow("total"));
+                result.put(date, total);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return result;
+    }
 }

@@ -11,6 +11,18 @@ import android.widget.TextView;
 
 import com.example.campusstage2.Auth;
 import com.example.campusstage2.R;
+import com.example.campusstage2.model.Expense;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +35,7 @@ public class HomeFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private BarChart barChart;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -65,9 +78,36 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        TextView textHome = view.findViewById(R.id.text_home);
+
         Auth auth = new Auth(getContext());
-        textHome.setText("Hi "+auth.getName()+", "+auth.getPhone());
+
+        barChart = view.findViewById(R.id.barChart);
+        populateChart();
         return view;
+    }
+    private void populateChart() {
+        Map<String, Integer> expenseData = (new Expense(this.getContext())).getSumAmountByDay();
+
+        List<BarEntry> entries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        int index = 0;
+        for (Map.Entry<String, Integer> entry : expenseData.entrySet()) {
+            entries.add(new BarEntry(index, entry.getValue()));
+            labels.add(entry.getKey());
+            index++;
+        }
+
+        BarDataSet dataSet = new BarDataSet(entries, "Expenses Report");
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
+        BarData barData = new BarData(dataSet);
+        barChart.setData(barData);
+        barChart.getDescription().setEnabled(false);
+
+        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+        barChart.getXAxis().setGranularity(1f); // Ensure proper alignment of labels
+        barChart.getXAxis().setGranularityEnabled(true);
+        barChart.invalidate(); // Refresh chart
     }
 }

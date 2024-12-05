@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "campusexpense.db";
+    private static final String DATABASE_NAME = "campusexpense2.db";
     private static final int DATABASE_VERSION = 2;
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -89,6 +89,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " REFERENCES users (id))";
         db.execSQL(CREATE_EXPENSE_TABLE);
     }
-
-
 }
