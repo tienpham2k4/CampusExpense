@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F9F9F9">
+
+    <!-- Header with Category and Action -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:padding="8dp"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/categoryTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Category: Unknown"
+            android:textSize="18sp"
+            android:textColor="#FF6200EE"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Amount Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <!-- Amount Text -->
+        <TextView
+            android:id="@+id/amountTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Amount: $0"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Delete Button -->
+        <Button
+            android:id="@+id/deleteAmountButton"
+            android:layout_width="56dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center"
+            android:background="@drawable/baseline_delete_24"
+            android:contentDescription="Delete Amount"
+            android:padding="8dp" />
+
+        <!-- Edit Button -->
+        <Button
+            android:id="@+id/editButton"
+            android:layout_width="49dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/baseline_edit_24"
+            android:contentDescription="Edit"
+            android:padding="8dp" />
+    </LinearLayout>
+
+    <!-- Date Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/startDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Date: 01/01/2024"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/endDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End Date: 31/12/2024"
+            android:textSize="16sp"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <!-- Repeated Choice Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:background="#FFFFFF"
+        android:elevation="2dp">
+
+        <TextView
+            android:id="@+id/repeatedChoiceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Repeated Choice: No"
+            android:textSize="16sp"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+</LinearLayout>
