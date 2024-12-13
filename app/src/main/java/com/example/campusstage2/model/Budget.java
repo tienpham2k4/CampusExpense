@@ -24,6 +24,27 @@ public class Budget {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
+    public void insertRecurringExpense(int amount, int categoryId, Integer userId, String startDate, String endDate, String repeatChoice) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("amount", amount);
+        values.put("category_id", categoryId);
+        values.put("user_id", userId);
+        values.put("start_date", startDate);
+        values.put("end_date", endDate);
+        values.put("repeated_choice", repeatChoice);
+
+        long result = db.insert("recurring_expenses", null, values);
+
+        if (result == -1) {
+            // Handle failure
+        } else {
+            // Successfully inserted
+        }
+
+        db.close();
+    }
     public void insertBudget(int amount, Integer categoryId, Integer userId, String startDate, String endDate) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();

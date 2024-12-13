@@ -49,11 +49,12 @@ public class Expense {
 //        long expenseId = db.insert("expense", null, values);
 //        updateBudgetRemaining(amount, categoryId, userId,date);
     }
-    public void deleteExpense(int expenseId) {
+
+
+    public void deteleExpense(int expenseId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete("expense", "id = ?", new String[]{String.valueOf(expenseId)});
     }
-
     private void updateBudgetRemaining(int expenseAmount, Integer categoryId, Integer userId, String date) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -88,10 +89,7 @@ public class Expense {
         db.update("expense", values, "id = ?", new String[]{String.valueOf(this.getId())});
         db.close();
     }
-    public void deteleExpense(int expenseId) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete("expense", "id = ?", new String[]{String.valueOf(expenseId)});
-    }
+
 
     public Expense(Context context) {
         dbHelper = new DatabaseHelper(context);

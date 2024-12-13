@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- RecyclerView để hiển thị danh sách các khoản chi tiêu định kỳ -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewRecurringExpenses"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
+
+    <!-- Nút thêm khoản chi tiêu định kỳ -->
+    <Button
+        android:id="@+id/btnAddRecurringTransaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Recurring Transaction"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
+        android:name=".ScheduleNotification"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,8 +14,19 @@
         android:roundIcon="@drawable/icon_money"
         android:supportsRtl="true"
         android:theme="@style/Theme.CampusStage2"
-        android:name=".ScheduleNotification"
         tools:targetApi="32">
+        <activity
+            android:name=".RecurringExpenseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddRecurringExpense"
+            android:exported="false" />
+        <activity
+            android:name=".AddRecurringExpenseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RecurringExpenseFragment"
+            android:exported="false" />
         <activity
             android:name=".AddBudgetActivity"
             android:exported="false" />
@@ -24,7 +37,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="true"

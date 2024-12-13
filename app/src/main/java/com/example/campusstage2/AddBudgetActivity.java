@@ -2,7 +2,10 @@ package com.example.campusstage2;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -125,6 +128,10 @@ public class AddBudgetActivity extends AppCompatActivity {
 
     }
 
+
+
+
+
     public void showStartDatePickerDialog() {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -133,7 +140,9 @@ public class AddBudgetActivity extends AppCompatActivity {
 
         DatePickerDialog startDatePickerDialog = new DatePickerDialog(this,
                 (view, selectedYear, selectedMonth, selectedDay) -> {
-                    startDate.setText(selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear);
+                    // Format lại ngày trước khi set vào EditText
+                    String formattedDate = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
+                    startDate.setText(formattedDate);
                 }, year, month, day);
         startDatePickerDialog.show();
     }
@@ -145,13 +154,19 @@ public class AddBudgetActivity extends AppCompatActivity {
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog endDatePickerDialog = new DatePickerDialog(this,
+        DatePickerDialog startDatePickerDialog = new DatePickerDialog(this,
                 (view, selectedYear, selectedMonth, selectedDay) -> {
-                    endDate.setText(selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear);
+                    // Format lại ngày trước khi set vào EditText
+                    String formattedDate = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
+                    endDate.setText(formattedDate);
                 }, year, month, day);
-        endDatePickerDialog.show();
+        startDatePickerDialog.show();
+
+
+
+
+
+
+
     }
-
-
-
 }
