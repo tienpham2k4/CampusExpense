@@ -22,12 +22,6 @@
             android:name=".AddRecurringExpense"
             android:exported="false" />
         <activity
-            android:name=".AddRecurringExpenseActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RecurringExpenseFragment"
-            android:exported="false" />
-        <activity
             android:name=".AddBudgetActivity"
             android:exported="false" />
         <activity
@@ -37,10 +31,12 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainActivity"
+
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="true"
+            android:theme="@style/Theme.CampusStage2"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
